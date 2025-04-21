@@ -4,9 +4,9 @@ metadata:
   name: ticketing
 build:
   googleCloudBuild:
-    projectId: ticketing-dev-442717
+    projectId: ticketing-454620
   artifacts:
-    - image: eu.gcr.io/ticketing-dev-442717/auth
+    - image: eu.gcr.io/ticketing-454620/auth
       context: auth
       docker:
         dockerfile: Dockerfile

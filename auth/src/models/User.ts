@@ -1,29 +1,28 @@
-import { Schema, model, connect, Model } from 'mongoose';
+import { Schema, model } from 'mongoose';
+import bcrypt from 'bcrypt';
+import { IUserDocument, IUserModel } from '../types/user';
 
-interface IUser {
-  email: string;
-  password: string;
-}
-
-interface UserModel extends Model<any, IUser> {
-  build(attrs: IUser): any;
-}
-
-const userSchema = new Schema<IUser>({
+const UserSchema = new Schema({
   email: {
     type: String,
     required: true,
+    unique: true,
+    lowercase: true,
+    trim: true,
   },
   password: {
     type: String,
     required: true,
+    trim: true,
   },
 });
 
-const User = model<any, UserModel>('User', userSchema);
-
-userSchema.statics.build = (attrs: IUser) => {
-  return new User(attrs);
+UserSchema.methods.comparePassword = async function (
+  password: string
+): Promise<boolean> {
+  return bcrypt.compare(password, this.password);
 };
 
-export { User };
+const User = model<IUserDocument, IUserModel>('User', UserSchema);
+
+export default User;
